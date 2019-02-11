@@ -1,6 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  Platform, StyleSheet, Text, View
+} from 'react-native';
 import { Constants } from 'expo';
 import {
   getSettingsFromUrl,
@@ -12,7 +14,7 @@ import {
 import { DEFAULT_DISTANCE } from './Constants';
 import service from './Service';
 
-import { BikeTable, DepartureTiles } from './components';
+import { BikeTable, DepartureTiles, SearchPanel } from './components';
 
 const url = '/dashboard/@59-725065,10-842626/';
 
@@ -169,33 +171,6 @@ export default class App extends React.Component {
     </View>
   );
 
-  renderHeader = name => (
-    <View>
-      <Text style={styles.h1}>{name}</Text>
-    </View>
-  );
-
-  renderItem(item) {
-    return (
-      <View style={styles.item}>
-        {this.getTransportIcon(item.serviceJourney.journeyPattern.line.transportMode)}
-        <View style={styles.itemRoute}>
-          <Text style={styles.itemRouteText}>{item.destinationDisplay.frontText}</Text>
-          <View style={styles.itemTimes}>
-            <Text style={styles.itemTimesText}>
-              {this.getDepartureTime(
-                moment()
-                  .local()
-                  .toISOString(),
-                item.expectedDepartureTime,
-              )}
-            </Text>
-          </View>
-        </View>
-      </View>
-    );
-  }
-
   render() {
     const {
       hiddenStations,
@@ -217,6 +192,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.statusBar} />
+        <SearchPanel />
         {visibleStopCount > 0 ? (
           <DepartureTiles lineData={stopsData} visible={{ hiddenStops, hiddenRoutes, hiddenModes }} />
         ) : null}

@@ -23,9 +23,7 @@ const DepartureTile = ({
         <Text style={styles.tileHeaderName}>{name}</Text>
         <View style={styles.tileHeaderNameIcons}>
           {transportHeaderIcons.map((Icon, index) => (
-            <View style={styles.tileHeaderIcon} key={index}>
-              <Icon height={30} width={30} color={color} />
-            </View>
+            <View style={styles.tileHeaderIcon} key={index} />
           ))}
         </View>
       </View>
@@ -43,9 +41,8 @@ const DepartureTile = ({
               return null;
             }
             return (
-              <View key={route} style={styles.tile}>
-                <View style={styles.tileRoutename}>
-                  <Icon height={24} width={24} color={iconColor} style={styles.tileRouteNameIcon} />
+              <View key={route} style={styles.tileRoute}>
+                <View style={styles.tileRouteName}>
                   <Text style={styles.tileRouteNameText}>{route}</Text>
                 </View>
                 <View style={styles.tileRouteDepartures}>
@@ -66,13 +63,52 @@ const DepartureTile = ({
 export default DepartureTile;
 
 const styles = StyleSheet.create({
-  tile: {},
-  tileHeader: {},
-  tileHeaderIcons: {},
-  tileHeaderIcon: {},
-  tileRouteName: {},
+  tile: {
+    paddingHorizontal: 15,
+    paddingBottom: 15,
+    marginHorizontal: 25,
+    textShadowColor: '#585858',
+    textShadowOffset: { width: 5, height: 5 },
+    textShadowRadius: 10,
+  },
+  tileHeader: {
+    justifyContent: 'space-between',
+  },
+  tileHeaderName: {
+    fontSize: 35,
+    fontWeight: '500',
+    color: 'white',
+    marginBottom: 10,
+  },
+  tileHeaderIcons: {
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  tileHeaderIcon: {
+    marginLeft: 12,
+  },
+  tileRoute: {
+    marginBottom: 15,
+    borderColor: '#A29FEF',
+    borderBottomWidth: 1,
+  },
+  tileRouteName: {
+    marginBottom: 10,
+  },
   tileRouteNameIcon: {},
-  tileRouteNameText: {},
-  tileRouteDepartures: {},
-  tileRouteDeparturesTime: {},
+  tileRouteNameText: {
+    color: 'white',
+    fontSize: 25,
+    fontWeight: '400',
+  },
+  tileRouteDepartures: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  tileRouteDeparturesTime: {
+    color: '#61CBFD',
+    fontSize: 20,
+    fontWeight: '400',
+    marginBottom: 15,
+  },
 });
