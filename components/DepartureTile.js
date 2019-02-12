@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import {
   getIcon, getIconColor, groupBy, isVisible, getTransportHeaderIcons
-} from '../Utils';
+} from '../utils';
 
 const DepartureTile = ({
   stopPlace, routes, hiddenRoutes, hiddenModes

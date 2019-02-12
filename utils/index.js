@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { decode as atob, encode as btoa } from 'base-64';
-import { DEFAULT_DISTANCE } from './Constants';
-import service from './Service';
+import { DEFAULT_DISTANCE } from '../constants';
+import service from '../services';
 
 export function getIcon(type) {
   switch (type) {

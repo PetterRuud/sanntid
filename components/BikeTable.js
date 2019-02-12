@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { getIcon } from '../Utils';
+import { getIcon } from '../utils';
 
 const BikeTable = ({ stationData, visible }) => {
   const { hiddenModes, hiddenStations } = visible;

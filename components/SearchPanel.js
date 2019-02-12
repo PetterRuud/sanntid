@@ -1,10 +1,11 @@
 import React from 'react';
 import {
-  StyleSheet, Text, View, Button, Platform, ActivityIndicator
+  StyleSheet, Text, View, Button, Platform, ActivityIndicator,
 } from 'react-native';
 import { Constants, Location, Permissions } from 'expo';
-import { GeoLocation } from '../assets/icons';
-import service from '../Service';
+import AutoSuggest from './AutoSuggest';
+// import { GeoLocation } from '../assets/icons';
+import service from '../services';
 
 const YOUR_POSITION = 'Posisjonen din';
 
@@ -14,8 +15,8 @@ const renderSuggestion = (suggestion) => {
   if (suggestion.name === YOUR_POSITION) {
     return (
       <View>
-        {suggestion.name}
-        <View style="location-icon">
+        <Text>{suggestion.name}</Text>
+        <View>
           <Text>Geo</Text>
         </View>
       </View>
@@ -34,7 +35,6 @@ class SearchPanel extends React.Component {
       waiting: false,
       showPositionInList: true,
       selectedLocationName: '',
-      location: null,
       errorMessage: null,
     };
   }
@@ -52,21 +52,23 @@ class SearchPanel extends React.Component {
   componentDidMount() {}
 
   getLocationAsync = async () => {
+    const { suggestions } = this.state;
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    const suggestions = this.state.suggestions.filter(s => s.name !== YOUR_POSITION);
+    const suggestionsFiltered = suggestions.filter(s => s.name !== YOUR_POSITION);
     if (status !== 'granted') {
       this.setState({
         showPositionInList: false,
-        suggestions,
+        suggestions: suggestionsFiltered,
       });
     } else {
       this.setState({
-        suggestions: [{ name: YOUR_POSITION }, ...suggestions],
+        suggestions: [{ name: YOUR_POSITION }, ...suggestionsFiltered],
       });
     }
   };
 
-  onChange = (event, { newValue }) => {
+  onChange = (newValue) => {
+    console.log('newValue', newValue);
     this.setState({
       value: newValue,
       errorMessage: undefined,
@@ -74,7 +76,8 @@ class SearchPanel extends React.Component {
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
-    if (value !== this.state.selectedLocationName) {
+    const { selectedLocationName } = this.state;
+    if (value !== selectedLocationName) {
       this.setState({
         hasLocation: false,
         selectedLocationName: '',
@@ -86,7 +89,7 @@ class SearchPanel extends React.Component {
 
   getFeaturesDebounced = (value) => {
     const inputLength = value.trim().length;
-
+    const { showPositionInList } = this.state;
     if (inputLength > 0) {
       service.getFeatures(value).then((featuresData) => {
         const suggestedFeatures = featuresData.map(({ geometry, properties }) => ({
@@ -96,10 +99,7 @@ class SearchPanel extends React.Component {
           },
           name: `${properties.name}, ${properties.locality}`,
         }));
-
-        const features = this.state.showPositionInList
-          ? [{ name: YOUR_POSITION }, ...suggestedFeatures]
-          : suggestedFeatures;
+        const features = showPositionInList ? [{ name: YOUR_POSITION }, ...suggestedFeatures] : suggestedFeatures;
         this.setState({
           suggestions: features,
         });
@@ -130,7 +130,7 @@ class SearchPanel extends React.Component {
         selectedLocationName: YOUR_POSITION,
         waiting: true,
       });
-      const location = await Location.getCurrentPositionAsync({});
+      // const location = await Location.getCurrentPositionAsync({});
       // this.handleSuccessLocation
       // this.handleDeniedLocation
     } else {
@@ -164,8 +164,9 @@ class SearchPanel extends React.Component {
   };
 
   handleGoToBoard = () => {
-    const coordinates = this.state.chosenCoord;
-    return coordinates ? this.props.handleCoordinatesSelected(coordinates) : null;
+    const { chosenCoord } = this.state;
+    const { handleCoordinatesSelected } = this.props;
+    return chosenCoord ? handleCoordinatesSelected(chosenCoord) : null;
   };
 
   renderSpinner = () => (
@@ -184,11 +185,14 @@ class SearchPanel extends React.Component {
   };
 
   render() {
-    const { value, suggestions, errorMessage } = this.state;
+    const {
+      waiting, value, suggestions, errorMessage, hasLocation,
+    } = this.state;
+
     const inputProps = {
       placeholder: 'Adresse eller sted',
       value,
-      onChange: this.onChange,
+      onChangeText: this.onChange,
       onFocus: () => {
         this.setState({
           errorMessage: undefined,
@@ -196,7 +200,7 @@ class SearchPanel extends React.Component {
       },
     };
 
-    const btnClass = !this.state.hasLocation ? 'locationFalse' : 'locationTrue';
+    const btnClass = !hasLocation ? 'locationFalse' : 'locationTrue';
 
     return (
       <React.Fragment>
@@ -204,7 +208,7 @@ class SearchPanel extends React.Component {
           <View style={styles.searchInput}>
             <Text style={styles.searchLabel}>Område</Text>
             <View style={styles.searchSpinner}>
-              <ReactAutosuggest
+              <AutoSuggest
                 suggestions={suggestions}
                 shouldRenderSuggestions={() => true}
                 onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
@@ -214,7 +218,7 @@ class SearchPanel extends React.Component {
                 renderSuggestion={renderSuggestion}
                 inputProps={inputProps}
               />
-              {this.state.waiting && this.renderSpinner()}
+              {waiting && this.renderSpinner()}
             </View>
           </View>
           <Button title="Opprett tavle" style={`${styles.search}${btnClass}`} onPress={this.handleGoToBoard} />
