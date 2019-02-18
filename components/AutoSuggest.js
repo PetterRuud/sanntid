@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
-
 import {
-  View, TextInput, TouchableOpacity, Modal, KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  StyleSheet,
+  View,
+  Text,
 } from 'react-native';
+
+import { Icon } from 'expo';
 import isEqual from 'lodash.isequal';
 
-const defaultShouldRenderSuggestions = value => value.trim().length > 0;
+import {
+  AppStyle, Colors, Fonts, Metrics,
+} from '../theme';
 
 export default class Autosuggest extends Component {
-  constructor({ suggestions, defaultValue }) {
+  constructor({ suggestions }) {
     super();
 
     this.state = {
-      focused: false,
       suggestions: suggestions || [],
-      value: defaultValue || '',
     };
   }
 
@@ -36,82 +44,63 @@ export default class Autosuggest extends Component {
         suggestionValue,
       },
     );
-
-    this.setState({
-      value: suggestionValue,
-    });
-
-    this.close();
   }
 
   onChangeText = (value) => {
-    const { inputProps, onSuggestionsClearRequested, onSuggestionsFetchRequested } = this.props;
-    inputProps.onChangeText(value);
+    const { onChange, onSuggestionsClearRequested, onSuggestionsFetchRequested } = this.props;
+    onChange(value);
+
     if (value.length === 0) {
       onSuggestionsClearRequested();
     } else {
       onSuggestionsFetchRequested({ value });
     }
-
-    this.setState({
-      value,
-    });
-  };
-
-  getField(optionalProps) {
-    const { inputProps } = this.props;
-    const { value } = this.state;
-    console.log('VALUE', value);
-    return (
-      <TextInput
-        {...inputProps}
-        onChangeText={this.onChangeText}
-        autoCapitalize="none"
-        autoCorrect={false}
-        maxLength={255}
-        placeholder={inputProps.placeholder}
-        style={{
-          marginBottom: 0,
-          height: 60,
-        }}
-        {...optionalProps}
-      />
-    );
-  }
-
-  close = () => {
-    this.setState({ focused: false });
   };
 
   render() {
-    const { renderSuggestion, onRequestClose, childKey } = this.props;
-    const { suggestions, focused } = this.state;
+    const { renderSuggestion, inputProps } = this.props;
+    const { suggestions } = this.state;
     return (
-      <View>
-        {this.getField({
-          onFocus: () => this.setState({ focused: true }),
-        })}
-        <Modal animationType="slide" visible={focused} onRequestClose={onRequestClose}>
-          <View style={{ flex: 1 }}>
-            <KeyboardAvoidingView keyboardShouldPersistTaps="handled" extraHeight={20} enableOnAndroid>
-              {this.getField({
-                autoFocus: true,
-              })}
+      <View style={{ height: Metrics.screenHeight }}>
+        <TextInput
+          onChangeText={this.onChangeText}
+          autoCapitalize="none"
+          autoCorrect={false}
+          maxLength={255}
+          clearButtonMode="while-editing"
+          keyboardAppearance="dark"
+          style={AppStyle.form.search}
+          placeholderTextColor={Colors.text}
+          {...inputProps}
+        />
 
-              {suggestions.map((suggestion, i) => (
-                <TouchableOpacity
-                  onPress={(event) => {
-                    this.onSuggestionSelected(suggestion);
-                  }}
-                  key={childKey ? suggestion[childKey] : i}
-                >
-                  {renderSuggestion(suggestion)}
-                </TouchableOpacity>
-              ))}
-            </KeyboardAvoidingView>
-          </View>
-        </Modal>
+        <KeyboardAvoidingView enableOnAndroid keyboardVerticalOffset={100}>
+          <ScrollView>
+            {suggestions.map((suggestion, index) => (
+              <TouchableOpacity
+                style={styles.suggestion}
+                onPress={() => {
+                  this.onSuggestionSelected(suggestion);
+                }}
+                key={index}
+              >
+                {renderSuggestion(suggestion)}
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </KeyboardAvoidingView>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  suggestion: {
+    padding: 5,
+    borderColor: Colors.divider,
+    borderBottomWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: Colors.card,
+  },
+});

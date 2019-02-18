@@ -1,0 +1,28 @@
+const colors = {
+  background: '#1c2431',
+  primary: '#6760fa',
+  secondary: '#f97176',
+  tertiary: '#928FEE',
+  text: '#FFFFFF',
+  textDark: '#ca4248',
+  header: '#6760fa',
+  headerText: '#FFFFFF',
+  button: '#FFFFFF',
+  buttonText: '#bbbbbb',
+  card: '#283142',
+  transparent: 'rgba(0,0,0,0)',
+  divider: 'rgba(255, 255, 255,0.2)',
+  facebook: '#4267b1',
+  error: 'rgba(200, 0, 0, 0.8)',
+  shadow: 'rgba(0,0,0, 0.5)',
+  white: '#FFFFFF',
+  fire: '#e73536',
+  dark: '#191919',
+  light: '#d2d2d2',
+  black: '#000000',
+  darkGrey: '#878787',
+  grey: '#bcbcbc',
+  lightGrey: '#e2e2e2',
+};
+
+export default colors;

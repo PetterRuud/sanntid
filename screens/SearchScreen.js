@@ -2,30 +2,47 @@ import React from 'react';
 import {
   StyleSheet, Text, View, Button, Platform, ActivityIndicator,
 } from 'react-native';
-import { Constants, Location, Permissions } from 'expo';
-import AutoSuggest from './AutoSuggest';
+import {
+  Constants, Location, Permissions, Icon,
+} from 'expo';
+import { AutoSuggest } from '../components';
 // import { GeoLocation } from '../assets/icons';
 import service from '../services';
 
+import { AppStyle, Colors, Fonts } from '../theme';
+
 const YOUR_POSITION = 'Posisjonen din';
 
-const getSuggestionValue = suggestion => suggestion.name;
+const getSuggestionValue = suggestion => <Text>{suggestion.name}</Text>;
 
 const renderSuggestion = (suggestion) => {
   if (suggestion.name === YOUR_POSITION) {
     return (
-      <View>
-        <Text>{suggestion.name}</Text>
-        <View>
-          <Text>Geo</Text>
-        </View>
+      <View style={styles.menuItem}>
+        <Text style={styles.text}>{suggestion.name}</Text>
+        <Icon.Ionicons
+          name={Platform.OS === 'ios' ? 'ios-pin' : 'md-pin'}
+          size={26}
+          style={styles.icon}
+          color={Colors.primary}
+        />
       </View>
     );
   }
-  return <Text>{suggestion.name}</Text>;
+  return (
+    <View style={styles.menuItem}>
+      <Text style={styles.text}>{suggestion.name}</Text>
+      <Icon.Ionicons
+        name={Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward'}
+        size={26}
+        style={styles.icon}
+        color={Colors.primary}
+      />
+    </View>
+  );
 };
 
-class SearchPanel extends React.Component {
+class SearchScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,8 +66,6 @@ class SearchPanel extends React.Component {
     }
   }
 
-  componentDidMount() {}
-
   getLocationAsync = async () => {
     const { suggestions } = this.state;
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -68,7 +83,6 @@ class SearchPanel extends React.Component {
   };
 
   onChange = (newValue) => {
-    console.log('newValue', newValue);
     this.setState({
       value: newValue,
       errorMessage: undefined,
@@ -125,14 +139,15 @@ class SearchPanel extends React.Component {
   };
 
   onSuggestionSelected = async (event, { suggestion }) => {
+    console.log(suggestion);
     if (suggestion.name === YOUR_POSITION) {
       this.setState({
         selectedLocationName: YOUR_POSITION,
         waiting: true,
       });
-      // const location = await Location.getCurrentPositionAsync({});
-      // this.handleSuccessLocation
-      // this.handleDeniedLocation
+      const location = await Location.getCurrentPositionAsync({});
+      this.handleSuccessLocation(location);
+      // this.handleDeniedLocation();
     } else {
       this.setState({
         chosenCoord: suggestion.coordinates,
@@ -140,6 +155,8 @@ class SearchPanel extends React.Component {
         selectedLocationName: suggestion.name,
       });
     }
+
+    this.goToDepartureBoard(suggestion.coordinates);
   };
 
   handleSuccessLocation = (data) => {
@@ -163,10 +180,12 @@ class SearchPanel extends React.Component {
     console.log('Permission denied with error: ', error); // eslint-disable-line
   };
 
-  handleGoToBoard = () => {
-    const { chosenCoord } = this.state;
-    const { handleCoordinatesSelected } = this.props;
-    return chosenCoord ? handleCoordinatesSelected(chosenCoord) : null;
+  goToDepartureBoard = (position) => {
+    const pos = `${position.lat},${position.lon}`.split('.').join('-');
+    const { navigation } = this.props;
+    navigation.replace('Home', {
+      position: `/dashboard/@${pos}/`,
+    });
   };
 
   renderSpinner = () => (
@@ -186,13 +205,12 @@ class SearchPanel extends React.Component {
 
   render() {
     const {
-      waiting, value, suggestions, errorMessage, hasLocation,
+      waiting, value, suggestions, errorMessage,
     } = this.state;
 
     const inputProps = {
       placeholder: 'Adresse eller sted',
       value,
-      onChangeText: this.onChange,
       onFocus: () => {
         this.setState({
           errorMessage: undefined,
@@ -200,48 +218,54 @@ class SearchPanel extends React.Component {
       },
     };
 
-    const btnClass = !hasLocation ? 'locationFalse' : 'locationTrue';
-
     return (
-      <React.Fragment>
-        <View style={styles.search}>
-          <View style={styles.searchInput}>
-            <Text style={styles.searchLabel}>Område</Text>
-            <View style={styles.searchSpinner}>
-              <AutoSuggest
-                suggestions={suggestions}
-                shouldRenderSuggestions={() => true}
-                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                onSuggestionSelected={this.onSuggestionSelected}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={inputProps}
-              />
-              {waiting && this.renderSpinner()}
-            </View>
-          </View>
-          <Button title="Opprett tavle" style={`${styles.search}${btnClass}`} onPress={this.handleGoToBoard} />
+      <View style={AppStyle.screen.container}>
+        <View style={styles.searchSpinner}>
+          <AutoSuggest
+            suggestions={suggestions}
+            shouldRenderSuggestions={() => true}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            onSuggestionSelected={this.onSuggestionSelected}
+            getSuggestionValue={getSuggestionValue}
+            renderSuggestion={renderSuggestion}
+            onChange={this.onChange}
+            inputProps={inputProps}
+          />
+          {waiting && this.renderSpinner()}
         </View>
         {errorMessage && (
           <Text role="alert" style={{ color: 'red' }}>
             {errorMessage}
           </Text>
         )}
-      </React.Fragment>
+      </View>
     );
   }
 }
 
-export default SearchPanel;
+export default SearchScreen;
 
 const styles = StyleSheet.create({
-  tile: {},
-  tileHeader: {},
-  tileHeaderIcons: {},
-  tileHeaderText: {},
-  tileBike: {},
-  tileBikeStation: {},
-  tileBikeStationIcon: {},
-  tileBikeAvailable: {},
+  menuItem: {
+    // marginLeft: 10,
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingVertical: 5,
+    flex: 1,
+  },
+  text: {
+    // justifyContent: 'flex-start',
+    flexGrow: 1,
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    ...Fonts.style.normal,
+  },
+  icon: {
+    justifyContent: 'flex-end',
+    paddingHorizontal: 10,
+    marginBottom: -3,
+  },
 });

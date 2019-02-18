@@ -1,13 +1,30 @@
 import { createStackNavigator } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
-import DepartureScreen from '../screens/DepartureScreen';
+import SearchScreen from '../screens/SearchScreen';
 
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-  Departure: DepartureScreen,
-});
+import { Colors, Fonts, AppStyle } from '../theme';
 
-HomeStack.navigationOptions = {};
+const HomeStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Search: SearchScreen,
+  },
+  {
+    initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.header,
+        borderBottomWidth: 0,
+        ...AppStyle.helpers.shadow,
+      },
+      headerTintColor: Colors.text,
+      headerTitleStyle: {
+        ...Fonts.style.h2,
+        color: Colors.text,
+      },
+    },
+  },
+);
 
 export default HomeStack;

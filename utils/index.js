@@ -8,19 +8,19 @@ export function getIcon(type) {
     case 'bus':
       return 'bus';
     case 'bike':
-      return 'bus';
+      return 'bicycle';
     case 'water':
-      return 'bus';
+      return 'boat';
     case 'metro':
       return 'bus';
     case 'rail':
-      return 'bus';
+      return 'train';
     case 'tram':
       return 'bus';
     case 'lock':
-      return 'bus';
+      return 'lock';
     case 'air':
-      return 'bus';
+      return 'airplane';
     default:
       return null;
   }
@@ -170,8 +170,7 @@ export function getStopsWithUniqueStopPlaceDepartures(stops) {
 }
 
 export function getStopPlacesByPositionAndDistance(position, distance = DEFAULT_DISTANCE) {
-  return service.getStopPlacesByPosition(position, distance)
-  .then(stopPlaces => stopPlaces.map(stop => ({
+  return service.getStopPlacesByPosition(position, distance).then(stopPlaces => stopPlaces.map(stop => ({
     ...stop,
     departures: [],
   })));
@@ -219,7 +218,7 @@ export function sortLists(list1, list2) {
 
 export function updateSettingsHashStops(state, sortedStops) {
   const {
-    distance, hiddenStations, hiddenStops, hiddenRoutes, hiddenModes, newStations
+    distance, hiddenStations, hiddenStops, hiddenRoutes, hiddenModes, newStations,
   } = state;
   const savedSettings = {
     distance,
@@ -235,7 +234,7 @@ export function updateSettingsHashStops(state, sortedStops) {
 
 export function updateSettingsHashStations(state, sortedStations) {
   const {
-    distance, hiddenStations, hiddenStops, hiddenRoutes, hiddenModes, newStops
+    distance, hiddenStations, hiddenStops, hiddenRoutes, hiddenModes, newStops,
   } = state;
   const savedSettings = {
     distance,
@@ -251,7 +250,7 @@ export function updateSettingsHashStations(state, sortedStations) {
 
 export function updateHiddenListAndHash(clickedId, state, hiddenType) {
   const {
-    hiddenStops, hiddenStations, distance, hiddenRoutes, hiddenModes, newStations, newStops
+    hiddenStops, hiddenStations, distance, hiddenRoutes, hiddenModes, newStations, newStops,
   } = state;
   let newSet = [];
   let hashedState = '';

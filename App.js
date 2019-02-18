@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  Platform, StatusBar, StyleSheet, View
+  Platform, StatusBar, StyleSheet, View,
 } from 'react-native';
 import {
-  AppLoading, Asset, Font, Icon
+  AppLoading, Asset, Font, Icon,
 } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
@@ -13,10 +13,10 @@ export default class App extends React.Component {
   };
 
   loadResourcesAsync = async () => Promise.all([
-    Asset.loadAsync([]),
-    Font.loadAsync({
+    await Font.loadAsync({
+      NunitoSans: require('./assets/fonts/NunitoSans-Regular.ttf'),
+      NunitoSansBold: require('./assets/fonts/NunitoSans-ExtraBold.ttf'),
       ...Icon.Ionicons.font,
-      'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
   ]);
 
@@ -44,7 +44,7 @@ export default class App extends React.Component {
     }
     return (
       <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        {Platform.OS === 'ios' && <StatusBar barStyle="light-content" />}
         <AppNavigator />
       </View>
     );

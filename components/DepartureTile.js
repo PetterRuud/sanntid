@@ -1,12 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
 import {
-  getIcon, getIconColor, groupBy, isVisible, getTransportHeaderIcons
+  StyleSheet, Text, View, Platform,
+} from 'react-native';
+
+import { Icon } from 'expo';
+import {
+  getIcon, getIconColor, groupBy, isVisible, getTransportHeaderIcons,
 } from '../utils';
 
+import { Colors, Fonts, AppStyle } from '../theme';
+
 const DepartureTile = ({
-  stopPlace, routes, hiddenRoutes, hiddenModes
+  stopPlace, routes, hiddenRoutes, hiddenModes,
 }) => {
   const { departures, name, id } = stopPlace;
   const groupedDepartures = groupBy(departures, 'route');
@@ -22,8 +27,15 @@ const DepartureTile = ({
       <View style={styles.tileHeader}>
         <Text style={styles.tileHeaderName}>{name}</Text>
         <View style={styles.tileHeaderNameIcons}>
-          {transportHeaderIcons.map((Icon, index) => (
-            <View style={styles.tileHeaderIcon} key={index} />
+          {transportHeaderIcons.map((iconName, index) => (
+            <View style={styles.tileHeaderIcon} key={index}>
+              <Icon.Ionicons
+                name={Platform.OS === 'ios' ? `ios-${iconName}` : `md-${iconName}`}
+                size={26}
+                color={color}
+                style={styles.tileRouteNameIcon}
+              />
+            </View>
           ))}
         </View>
       </View>
@@ -34,7 +46,7 @@ const DepartureTile = ({
             const subType = groupedDepartures[route][0].subType;
             const routeData = groupedDepartures[route].slice(0, 3);
             const routeType = routeData[0].type;
-            const Icon = getIcon(routeType);
+            const iconName = getIcon(routeType);
             const iconColor = getIconColor(routeType, subType);
 
             if (hiddenModes.includes(routeType)) {
@@ -43,6 +55,12 @@ const DepartureTile = ({
             return (
               <View key={route} style={styles.tileRoute}>
                 <View style={styles.tileRouteName}>
+                  <Icon.Ionicons
+                    name={Platform.OS === 'ios' ? `ios-${iconName}` : `md-${iconName}`}
+                    size={26}
+                    color={iconColor}
+                    style={styles.tileRouteNameIcon}
+                  />
                   <Text style={styles.tileRouteNameText}>{route}</Text>
                 </View>
                 <View style={styles.tileRouteDepartures}>
@@ -64,21 +82,21 @@ export default DepartureTile;
 
 const styles = StyleSheet.create({
   tile: {
-    paddingHorizontal: 15,
-    paddingBottom: 15,
-    marginHorizontal: 25,
-    textShadowColor: '#585858',
-    textShadowOffset: { width: 5, height: 5 },
-    textShadowRadius: 10,
+    backgroundColor: Colors.card,
+    padding: 20,
+    margin: 15,
+    borderRadius: 8,
+    ...AppStyle.helpers.shadow,
   },
   tileHeader: {
     justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   tileHeaderName: {
-    fontSize: 35,
-    fontWeight: '500',
-    color: 'white',
+    ...Fonts.style.h2,
     marginBottom: 10,
+    color: Colors.text,
   },
   tileHeaderIcons: {
     marginTop: 30,
@@ -88,27 +106,28 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   tileRoute: {
-    marginBottom: 15,
-    borderColor: '#A29FEF',
+    marginBottom: 10,
+    borderColor: Colors.divider,
     borderBottomWidth: 1,
   },
   tileRouteName: {
     marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  tileRouteNameIcon: {},
+  tileRouteNameIcon: {
+    marginRight: 10,
+  },
   tileRouteNameText: {
-    color: 'white',
-    fontSize: 25,
-    fontWeight: '400',
+    ...Fonts.style.h4,
   },
   tileRouteDepartures: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   tileRouteDeparturesTime: {
-    color: '#61CBFD',
-    fontSize: 20,
-    fontWeight: '400',
-    marginBottom: 15,
+    ...Fonts.style.h5,
+    marginBottom: 10,
+    color: Colors.text,
   },
 });
