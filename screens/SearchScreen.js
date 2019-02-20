@@ -139,9 +139,8 @@ class SearchScreen extends React.Component {
   };
 
   onSuggestionSelected = async (event, { suggestion }) => {
-    console.log(suggestion);
     if (suggestion.name === YOUR_POSITION) {
-      this.setState({
+      await this.setState({
         selectedLocationName: YOUR_POSITION,
         waiting: true,
       });
@@ -149,14 +148,14 @@ class SearchScreen extends React.Component {
       this.handleSuccessLocation(location);
       // this.handleDeniedLocation();
     } else {
-      this.setState({
+      await this.setState({
         chosenCoord: suggestion.coordinates,
         hasLocation: true,
         selectedLocationName: suggestion.name,
       });
     }
 
-    this.goToDepartureBoard(suggestion.coordinates);
+    await this.goToDepartureBoard();
   };
 
   handleSuccessLocation = (data) => {
@@ -180,8 +179,9 @@ class SearchScreen extends React.Component {
     console.log('Permission denied with error: ', error); // eslint-disable-line
   };
 
-  goToDepartureBoard = (position) => {
-    const pos = `${position.lat},${position.lon}`.split('.').join('-');
+  goToDepartureBoard = () => {
+    const { chosenCoord } = this.state;
+    const pos = `${chosenCoord.lat},${chosenCoord.lon}`.split('.').join('-');
     const { navigation } = this.props;
     navigation.replace('Home', {
       position: `/dashboard/@${pos}/`,

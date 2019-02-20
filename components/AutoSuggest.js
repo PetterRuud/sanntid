@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
 import {
-  Platform,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  StyleSheet,
-  View,
-  Text,
+  ScrollView, TextInput, TouchableOpacity, KeyboardAvoidingView, StyleSheet, View,
 } from 'react-native';
 
-import { Icon } from 'expo';
 import isEqual from 'lodash.isequal';
 
-import {
-  AppStyle, Colors, Fonts, Metrics,
-} from '../theme';
+import { AppStyle, Colors, Metrics } from '../theme';
 
 export default class Autosuggest extends Component {
   constructor({ suggestions }) {
@@ -61,7 +51,7 @@ export default class Autosuggest extends Component {
     const { renderSuggestion, inputProps } = this.props;
     const { suggestions } = this.state;
     return (
-      <View style={{ height: Metrics.screenHeight }}>
+      <View>
         <TextInput
           onChangeText={this.onChangeText}
           autoCapitalize="none"
@@ -74,7 +64,7 @@ export default class Autosuggest extends Component {
           {...inputProps}
         />
 
-        <KeyboardAvoidingView enableOnAndroid keyboardVerticalOffset={100}>
+        <KeyboardAvoidingView behavior="padding" enabled>
           <ScrollView>
             {suggestions.map((suggestion, index) => (
               <TouchableOpacity

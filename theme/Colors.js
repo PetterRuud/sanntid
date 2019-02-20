@@ -1,5 +1,5 @@
 const colors = {
-  background: '#1c2431',
+  background: '#283142',
   primary: '#6760fa',
   secondary: '#f97176',
   tertiary: '#928FEE',
@@ -9,7 +9,7 @@ const colors = {
   headerText: '#FFFFFF',
   button: '#FFFFFF',
   buttonText: '#bbbbbb',
-  card: '#283142',
+  card: '#323d50',
   transparent: 'rgba(0,0,0,0)',
   divider: 'rgba(255, 255, 255,0.2)',
   facebook: '#4267b1',
@@ -20,7 +20,7 @@ const colors = {
   dark: '#191919',
   light: '#d2d2d2',
   black: '#000000',
-  darkGrey: '#878787',
+  darkGrey: '#69778c',
   grey: '#bcbcbc',
   lightGrey: '#e2e2e2',
 };

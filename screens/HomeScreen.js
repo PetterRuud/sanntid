@@ -29,6 +29,12 @@ export default class HomeScreen extends React.Component {
         name={Platform.OS === 'ios' ? 'ios-search' : 'md-search'}
       />
     ),
+    headerLeft: (
+      <HeaderIcon
+        onPress={() => navigation.navigate('Search')}
+        name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
+      />
+    ),
   });
 
   constructor(props) {
