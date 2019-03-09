@@ -2,8 +2,8 @@ import normalize from '../lib/FontSizeHelpers';
 import Colors from './Colors';
 
 const type = {
-  base: 'NunitoSans',
-  bold: 'NunitoSansBold',
+  base: 'Varela',
+  bold: 'Varela',
 };
 
 const size = {
@@ -25,21 +25,17 @@ const style = {
   h1: {
     fontFamily: type.base,
     fontSize: size.h1,
-    color: Colors.heading,
-    fontWeight: 'bold',
+    color: Colors.text,
   },
   h2: {
-    fontWeight: 'bold',
     fontSize: size.h2,
-    color: Colors.heading,
+    color: Colors.text,
   },
   h3: {
-    fontWeight: 'bold',
     fontSize: size.h3,
-    color: Colors.heading,
+    color: Colors.text,
   },
   h4: {
-    fontWeight: 'bold',
     fontFamily: type.bold,
     fontSize: size.h4,
     color: Colors.darkGrey,

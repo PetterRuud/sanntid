@@ -3,7 +3,7 @@ import {
   StyleSheet, Text, View, Platform,
 } from 'react-native';
 
-import { Icon } from 'expo';
+import { Icon, LinearGradient } from 'expo';
 import {
   getIcon, getIconColor, groupBy, isVisible, getTransportHeaderIcons,
 } from '../utils';
@@ -23,7 +23,7 @@ const DepartureTile = ({
   const transportHeaderIcons = getTransportHeaderIcons(stopPlace.departures, hiddenModes);
 
   return (
-    <View style={styles.tile} key={id}>
+    <View key={id} style={styles.tile}>
       <View style={styles.tileHeader}>
         <Text style={styles.tileHeaderName}>{name}</Text>
         <View style={styles.tileHeaderNameIcons}>
@@ -31,7 +31,7 @@ const DepartureTile = ({
             <View style={styles.tileHeaderIcon} key={index}>
               <Icon.Ionicons
                 name={Platform.OS === 'ios' ? `ios-${iconName}` : `md-${iconName}`}
-                size={26}
+                size={36}
                 color={color}
                 style={styles.tileRouteNameIcon}
               />
@@ -42,7 +42,7 @@ const DepartureTile = ({
       <View>
         {routes
           .filter(route => !hiddenRoutes.includes(route))
-          .map((route) => {
+          .map((route, index) => {
             const subType = groupedDepartures[route][0].subType;
             const routeData = groupedDepartures[route].slice(0, 3);
             const routeType = routeData[0].type;
@@ -54,6 +54,8 @@ const DepartureTile = ({
             }
             return (
               <View key={route} style={styles.tileRoute}>
+                {index !== 0 && <View style={styles.divider} />}
+
                 <View style={styles.tileRouteName}>
                   <Icon.Ionicons
                     name={Platform.OS === 'ios' ? `ios-${iconName}` : `md-${iconName}`}
@@ -83,9 +85,9 @@ export default DepartureTile;
 const styles = StyleSheet.create({
   tile: {
     backgroundColor: Colors.card,
-    padding: 20,
-    margin: 15,
-    borderRadius: 8,
+    padding: 16,
+    margin: 10,
+    borderRadius: 10,
     ...AppStyle.helpers.shadow,
   },
   tileHeader: {
@@ -95,7 +97,7 @@ const styles = StyleSheet.create({
   },
   tileHeaderName: {
     ...Fonts.style.h2,
-    marginBottom: 10,
+    marginBottom: 8,
     color: Colors.text,
   },
   tileHeaderIcons: {
@@ -105,13 +107,14 @@ const styles = StyleSheet.create({
   tileHeaderIcon: {
     marginLeft: 12,
   },
-  tileRoute: {
-    marginBottom: 10,
+  tileRoute: {},
+  divider: {
+    marginBottom: 8,
     borderColor: Colors.divider,
     borderBottomWidth: 1,
   },
   tileRouteName: {
-    marginBottom: 10,
+    marginBottom: 8,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -120,6 +123,7 @@ const styles = StyleSheet.create({
   },
   tileRouteNameText: {
     ...Fonts.style.h4,
+    color: Colors.text,
   },
   tileRouteDepartures: {
     flexDirection: 'row',
@@ -127,7 +131,7 @@ const styles = StyleSheet.create({
   },
   tileRouteDeparturesTime: {
     ...Fonts.style.h5,
-    marginBottom: 10,
+    marginBottom: 8,
     color: Colors.text,
   },
 });

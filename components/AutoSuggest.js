@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 10,
-    backgroundColor: Colors.card,
+    backgroundColor: Colors.background,
   },
 });

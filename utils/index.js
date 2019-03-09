@@ -3,6 +3,8 @@ import { decode as atob, encode as btoa } from 'base-64';
 import { DEFAULT_DISTANCE } from '../constants';
 import service from '../services';
 
+import { Colors } from '../theme';
+
 export function getIcon(type) {
   switch (type) {
     case 'bus':
@@ -32,19 +34,19 @@ export function getIconColor(type, subType) {
 
   switch (type) {
     case 'bus':
-      return 'red'; // COLORS.BUS_MIDNIGHT;
+      return Colors.tertiary; // COLORS.BUS_MIDNIGHT;
     case 'bike':
-      return 'red'; // COLORS.BICYCLE_MIDNIGHT;
+      return Colors.tertiary; // COLORS.BICYCLE_MIDNIGHT;
     case 'water':
-      return 'red'; // COLORS.FERRY_MIDNIGHT;
+      return Colors.tertiary; // COLORS.FERRY_MIDNIGHT;
     case 'metro':
-      return 'red'; // COLORS.SUBWAY_MIDNIGHT;
+      return Colors.tertiary; // COLORS.SUBWAY_MIDNIGHT;
     case 'rail':
-      return 'red'; // COLORS.TRAIN_MIDNIGHT;
+      return Colors.tertiary; // COLORS.TRAIN_MIDNIGHT;
     case 'tram':
-      return 'red'; // COLORS.TRAM_MIDNIGHT;
+      return Colors.tertiary; // COLORS.TRAM_MIDNIGHT;
     case 'air':
-      return 'red'; // COLORS.PLANE_MIDNIGHT;
+      return Colors.tertiary; // COLORS.PLANE_MIDNIGHT;
     default:
       return null;
   }

@@ -14,8 +14,7 @@ export default class App extends React.Component {
 
   loadResourcesAsync = async () => Promise.all([
     await Font.loadAsync({
-      NunitoSans: require('./assets/fonts/NunitoSans-Regular.ttf'),
-      NunitoSansBold: require('./assets/fonts/NunitoSans-ExtraBold.ttf'),
+      Varela: require('./assets/fonts/VarelaRound-Regular.ttf'),
       ...Icon.Ionicons.font,
     }),
   ]);
