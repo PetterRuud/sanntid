@@ -25,15 +25,15 @@ const style = {
   h1: {
     fontFamily: type.base,
     fontSize: size.h1,
-    color: Colors.text,
+    color: Colors.textHeading,
   },
   h2: {
     fontSize: size.h2,
-    color: Colors.text,
+    color: Colors.textHeading,
   },
   h3: {
     fontSize: size.h3,
-    color: Colors.text,
+    color: Colors.textHeading,
   },
   h4: {
     fontFamily: type.bold,

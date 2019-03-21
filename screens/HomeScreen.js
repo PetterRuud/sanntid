@@ -16,7 +16,6 @@ import service from '../services';
 import { BikeTable, DepartureTiles, HeaderIcon } from '../components';
 // Styles
 import { AppStyle } from '../theme';
-import styles from './HomeScreenStyle';
 
 const url = '/dashboard/@59-725065,10-842626/';
 

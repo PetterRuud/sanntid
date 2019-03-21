@@ -142,11 +142,11 @@ const AppStyle = {
       shadowColor: Colors.shadow,
       shadowOffset: {
         width: 0,
-        height: 10,
+        height: 6,
       },
       shadowOpacity: 0.34,
-      shadowRadius: 16.27,
-      elevation: 20,
+      shadowRadius: 6.27,
+      elevation: 5,
     },
   },
 };

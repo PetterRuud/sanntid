@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
   tileHeaderName: {
     ...Fonts.style.h2,
     marginBottom: 8,
-    color: Colors.text,
   },
   tileHeaderIcons: {
     marginTop: 30,
@@ -123,7 +122,6 @@ const styles = StyleSheet.create({
   },
   tileRouteNameText: {
     ...Fonts.style.h4,
-    color: Colors.text,
   },
   tileRouteDepartures: {
     flexDirection: 'row',
@@ -132,6 +130,5 @@ const styles = StyleSheet.create({
   tileRouteDeparturesTime: {
     ...Fonts.style.h5,
     marginBottom: 8,
-    color: Colors.text,
   },
 });

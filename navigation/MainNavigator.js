@@ -21,6 +21,7 @@ const HomeStack = createStackNavigator(
       headerTintColor: Colors.text,
       headerTitleStyle: {
         ...Fonts.style.h2,
+        color: Colors.headerText,
       },
     },
   },
